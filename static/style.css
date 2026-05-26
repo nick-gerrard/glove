@@ -1,0 +1,53 @@
+
+:root {
+    --bg: #0a0a1a;
+    --text: #e8e8f0;
+    --accent: #7b68ee;
+    --card-bg: #13132a;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+}
+
+.navbar {
+    background: var(--card-bg);
+    color: var(--text)
+    max-width: auto;
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo {
+    height: 32px;
+    width: auto;
+}
+
+.home {
+    font-size: large;
+}
+
+.game-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.game-card {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 1.5rem;
+}
