@@ -1,0 +1,14 @@
+{{define "content"}}
+<div class="game-grid">
+    {{range .}}
+    <div class="game-card">
+    <h1 class="">{{.Title}}</h1>
+    <h2 class="">{{.Tagline}}</h2>
+    <p>Version: {{.Version}}</p>
+    <p>{{.GamePath}}</p>
+
+    </div>
+    {{end}}
+
+</div>
+{{end}}
