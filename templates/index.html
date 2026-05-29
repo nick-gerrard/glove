@@ -1,14 +1,14 @@
-{{define "content"}}
+{{ define "content" }}
 <div class="game-grid">
-    {{range .}}
+  {{ range . }}
+  <a class="game-link" href="/games/{{.Title}}">
     <div class="game-card">
-    <h1 class="">{{.Title}}</h1>
-    <h2 class="">{{.Tagline}}</h2>
-    <p>Version: {{.Version}}</p>
-    <p>{{.GamePath}}</p>
-
+      <h1 class="game-title">{{.Title}}</h1>
+      <span class="">{{.Tagline}}</span>
+      <p>Version: {{.Version}}</p>
+      <p>{{.GamePath}}</p>
     </div>
-    {{end}}
-
+  </a>
+  {{ end }}
 </div>
-{{end}}
+{{ end }}

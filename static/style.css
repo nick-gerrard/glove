@@ -1,53 +1,142 @@
-
 :root {
-    --bg: #0a0a1a;
-    --text: #e8e8f0;
-    --accent: #7b68ee;
-    --card-bg: #13132a;
+  --bg: #191613; /* page background */
+  --surface: #f0f0f0; /* cards, panels */
+  --border: #38322a; /* dividers, outlines */
+  --text: #2a2a2a; /* body copy */
+  --muted: #8a7a68; /* secondary text */
+  --accent: #e8b84b; /* links, highlights, ctas */
+  --accent-2: #c07070; /* optional second accent */
+  --font-body: Georgia, "Palatino Linotype", Palatino, serif;
+  --font-mono: "Courier New", Courier, monospace;
+  --font-ui: system-ui, -apple-system, sans-serif;
 }
 
 .container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 50%;
+  left: 1%;
+  transform: translate(-50%, -50%);
+  transform: rotate(-20deg);
+  width: 600px;
+  height: 300px; /* explicit height */
+  background-image: url("glove.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  top: 50%;
+  right: -100px; /* anchor to the right side */
+  transform: translateY(-50%) rotate(25deg); /* mirror the rotation */
+  width: 600px;
+  height: 300px;
+  background-image: url("glove.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: -1;
 }
 
 body {
-    background: var(--bg);
-    color: var(--text);
+  z-index: 1;
+  position: relative;
+  /* background: var(--surface); */
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, grey 1px, transparent 1px),
+    linear-gradient(to bottom, grey 1px, transparent 1px);
+  color: var(--text);
+  font-family: var(--font-body);
 }
 
 .navbar {
-    background: var(--card-bg);
-    color: var(--text)
-    max-width: auto;
-    margin: 0 auto;
-    padding: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  margin: 0 auto;
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.navbar a {
+  min-width: 5rem;
+  text-align: center;
+  text-decoration: none;
+  color: var(--muted); /* slightly dimmed by default */
+  transition: color 0.15s ease; /* smooth shift on hover */
+}
+
+.navbar a:hover {
+  color: var(--accent); /* lights up on hover */
 }
 
 .logo {
-    height: 32px;
-    width: auto;
-}
-
-.home {
-    font-size: large;
+  height: 2rem;
+  width: auto;
+  display: block;
 }
 
 .game-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1.5rem;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
 }
 
 .game-card {
-    background: var(--card-bg);
-    border-radius: 8px;
-    padding: 1.5rem;
+  background: var(--surface);
+  padding: 1.5rem;
+  text-align: center;
+  transform: rotate(-0.5deg);
+  border: 2px solid var(--border);
+  border-radius: 2px 6px 4px 3px / 5px 2px 6px 3px;
+  box-shadow: 3px 3px 0px #2a2a2a;
+}
+.game-link {
+  text-decoration: none;
+  color: inherit; /* so the text doesn't turn link-blue */
+}
+.game-title {
+  font-family: var(--font-mono);
+}
+
+@keyframes wiggle {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-1.5deg);
+  }
+  75% {
+    transform: rotate(1.5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.game-card:hover {
+  animation: wiggle 0.2s ease-in-out infinite;
+  cursor: pointer;
 }

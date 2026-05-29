@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 )
 
 type Game struct {
@@ -17,16 +18,14 @@ type Game struct {
 
 var games = []Game{}
 
-//
-// 	if err != nil {
-// 		http.Error(w, "template parse error: "+err.Error(), http.StatusInternalServerError)
-// 		return
-// 	}
-// 	if err := tmpl.ExecuteTemplate(w, "base", data); err != nil {
-// 		log.Printf("template execute error: %v", err)
-// 		return
-// 	}
-// }
+func addHeaders(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Cross-Origin-Embedder-Policy", "require-corp")
+		w.Header().Set("Cross-Origin-Opener-Policy", "same-origin")
+		w.Header().Set("Cross-Origin-Resource-Policy", "same-site")
+		next.ServeHTTP(w, r)
+	})
+}
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("templates/base.html", "templates/index.html")
@@ -37,13 +36,28 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl.ExecuteTemplate(w, "base", games)
 }
 
-// func gameHandler(w http.ResponseWriter, r *http.Request) {
-// 	renderPage(w, nil, "templates/game.html")
-// }
-//
-// func aboutHandler(w http.ResponseWriter, r *http.Request) {
-// 	renderPage(w, nil, "templates/about.html")
-// }
+func aboutHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl, err := template.ParseFiles("templates/base.html", "templates/about.html")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	tmpl.ExecuteTemplate(w, "base", nil)
+}
+
+func gameHandler(w http.ResponseWriter, r *http.Request) {
+	game := r.PathValue("title")
+	for _, g := range games {
+		if strings.EqualFold(game, g.Title) {
+			tmpl, err := template.ParseFiles("templates/base.html", "templates/game.html")
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			tmpl.ExecuteTemplate(w, "base", g)
+		}
+	}
+}
 
 func main() {
 	data, err := os.ReadFile("static/games.json")
@@ -54,9 +68,10 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-	http.HandleFunc("/", homeHandler)
-	// http.HandleFunc("/game", gameHandler)
-	// http.HandleFunc("/about", aboutHandler)
-	log.Fatal(http.ListenAndServe(":8000", nil))
+	mux := http.NewServeMux()
+	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	mux.HandleFunc("/", homeHandler)
+	mux.HandleFunc("/about", aboutHandler)
+	mux.HandleFunc("/games/{title}", gameHandler)
+	log.Fatal(http.ListenAndServe(":8000", addHeaders(mux)))
 }

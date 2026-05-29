@@ -1,6 +1,7 @@
-
-{{define "title"}}GAME{{end}}
-{{define "content"}}
-<h1>Games Coming Soon!</h1>
-
-{{end}}
+{{ define "content" }}
+<div class="game-info">
+  <h1 class="game-title">{{.Title}}</h1>
+  <p>{{.Tagline}}</p>
+  <a href="{{.GamePath}}" target="_blank">Play Game!</a>
+</div>
+{{ end }}
