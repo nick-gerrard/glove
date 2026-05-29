@@ -73,5 +73,5 @@ func main() {
 	mux.HandleFunc("/", homeHandler)
 	mux.HandleFunc("/about", aboutHandler)
 	mux.HandleFunc("/games/{title}", gameHandler)
-	log.Fatal(http.ListenAndServe(":8000", addHeaders(mux)))
+	log.Fatal(http.ListenAndServe(":9009", addHeaders(mux)))
 }
